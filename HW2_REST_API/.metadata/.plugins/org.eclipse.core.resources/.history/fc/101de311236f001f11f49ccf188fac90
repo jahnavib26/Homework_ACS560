@@ -1,0 +1,10 @@
+package com.acs560.restaurantsales.restaurant_sales.controllers;
+
+public class SalesController {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,58 @@
+package com.acs560.restaurantsales.restaurant_sales.services.impl;
+
+import com.acs560.restaurantsales.restaurant_sales.models.Sales;
+import com.acs560.restaurantsales.restaurant_sales.repositories.SalesRepository;
+import com.acs560.restaurantsales.restaurant_sales.services.SalesAnalysisService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Service implementation for analyzing sales data.
+ */
+@Service
+public class SalesAnalysisServiceImpl implements SalesAnalysisService {
+
+    private final SalesRepository salesRepository;
+
+    // Constructor-based dependency injection
+    public SalesAnalysisServiceImpl(SalesRepository salesRepository) {
+        this.salesRepository = salesRepository;
+    }
+
+    @Override
+    public double calculateAverageSalesByItem(String itemName, String month) {
+        // Fetch all sales and filter by itemName and month
+        List<Sales> sales = salesRepository.getSales()
+            .stream()
+            .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
+                         && sale.getYearMonth().equals(month))
+            .collect(Collectors.toList());
+
+        // Calculate the average transaction amount
+        return sales.stream()
+            .mapToDouble(Sales::getTransactionAmount)
+            .average()
+            .orElse(0.0);  // Return 0.0 if no sales were found
+    }
+
+    @Override
+    public double calculateAverageSalesByItem(String itemName, String month, int range) {
+        List<Sales> sales = salesRepository.getSales()
+            .stream()
+            .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
+                         && sale.getYearMonth().substring(5).equals(month))  // Extracting month from yearMonth
+            .limit(range)
+            .collect(Collectors.toList());
+
+        System.out.println("Found " + sales.size() + " sales for item: " + itemName + " in month: " + month);
+
+        return sales.stream()
+            .mapToDouble(Sales::getTransactionAmount)
+            .average()
+            .orElse(0.0);
+    }
+
+
+}

@@ -1,0 +1,37 @@
+package com.acs560.restaurantsales.restaurant_sales.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.acs560.restaurantsales.restaurant_sales.services.SalesAnalysisService;
+
+@RestController
+@RequestMapping("/api/v1/salesAnalysis")
+public class SalesAnalysisController {
+
+    @Autowired
+    private SalesAnalysisService salesAnalysisService;
+
+    @GetMapping("/average/{month}")
+    public double getAverageSales(@PathVariable int month) {
+        return salesAnalysisService.calculateAverageSales(month);
+    }
+    
+    @GetMapping("/average/{month}/{range}")
+    public double getAverageSalesRange(@PathVariable int month, @PathVariable int range) {
+        return salesAnalysisService.calculateAverageSalesRange(month, range);
+    }
+}
+
+    // Route to get max sales by item and month
+    @GetMapping("/max/{itemName}/{month}")
+    public double getMaxSales(@PathVariable String itemName, @PathVariable String month) {
+        return salesAnalysisService.calculateMaxSalesByItem(itemName, month);
+    }
+
+    // Route to get min sales by item and month
+    @GetMapping("/min/{itemName}/{month}")
+    public double getMinSales(@PathVariable String itemName, @PathVariable String month) {
+        return salesAnalysisService.calculateMinSalesByItem(itemName, month);
+    }
+}

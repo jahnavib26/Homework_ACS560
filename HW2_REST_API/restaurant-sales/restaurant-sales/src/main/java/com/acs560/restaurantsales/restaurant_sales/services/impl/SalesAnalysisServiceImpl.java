@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class SalesAnalysisServiceImpl implements SalesAnalysisService {
 
-    private final SalesRepository salesRepository;
+    public final SalesRepository salesRepository;
 
     public SalesAnalysisServiceImpl(SalesRepository salesRepository) {
         this.salesRepository = salesRepository;

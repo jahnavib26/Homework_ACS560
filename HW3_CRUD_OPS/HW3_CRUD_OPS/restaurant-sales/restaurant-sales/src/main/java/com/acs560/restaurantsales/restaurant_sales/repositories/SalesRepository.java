@@ -40,7 +40,7 @@ public class SalesRepository {
     }
 
     private static void saveSalesData() {
-        try (CSVWriter writer = new CSVWriter(new FileWriter("sales_data.csv", false))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/updated_restaurant_sales_data_6months.csv", false))) {
             for (Sales sales : salesList) {
                 writer.writeNext(new String[] { sales.getProductName(), String.valueOf(sales.getMonth()),
                         String.valueOf(sales.getYear()), String.valueOf(sales.getAmount()) });

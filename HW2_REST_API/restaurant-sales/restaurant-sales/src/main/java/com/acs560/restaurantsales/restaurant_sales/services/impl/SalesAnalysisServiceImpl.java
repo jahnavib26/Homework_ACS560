@@ -19,7 +19,7 @@ public class SalesAnalysisServiceImpl implements SalesAnalysisService {
 
     @Override
     public double calculateAverageSalesByItem(String itemName, String month) {
-        List<Sales> sales = salesRepository.getSales()
+        List<Sales> sales = SalesRepository.getSales()
             .stream()
             .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
                          && sale.getYearMonth().equals(month))
@@ -33,7 +33,7 @@ public class SalesAnalysisServiceImpl implements SalesAnalysisService {
 
     @Override
     public double calculateAverageSalesByItem(String itemName, String month, int range) {
-        List<Sales> sales = salesRepository.getSales()
+        List<Sales> sales = SalesRepository.getSales()
             .stream()
             .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
                          && sale.getYearMonth().equals(month))
@@ -49,7 +49,7 @@ public class SalesAnalysisServiceImpl implements SalesAnalysisService {
     // New implementation for max sales by item and month
     @Override
     public double calculateMaxSalesByItem(String itemName, String month) {
-        List<Sales> sales = salesRepository.getSales()
+        List<Sales> sales = SalesRepository.getSales()
             .stream()
             .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
                          && sale.getYearMonth().substring(5).equals(month))  // Extract month from 'YYYY-MM'
@@ -65,7 +65,7 @@ public class SalesAnalysisServiceImpl implements SalesAnalysisService {
     // New implementation for min sales by item and month
     @Override
     public double calculateMinSalesByItem(String itemName, String month) {
-        List<Sales> sales = salesRepository.getSales()
+        List<Sales> sales = SalesRepository.getSales()
             .stream()
             .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName)
                          && sale.getYearMonth().substring(5).equals(month))  // Extract month from 'YYYY-MM'

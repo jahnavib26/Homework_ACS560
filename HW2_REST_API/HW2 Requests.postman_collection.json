@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "bd78ef83-759e-4da2-baf5-77a266d3a2b9",
+		"name": "HW2 Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17220210"
+	},
+	"item": [
+		{
+			"name": "Max",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/salesAnalysis/max/Fries/04",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"salesAnalysis",
+						"max",
+						"Fries",
+						"04"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Min",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/salesAnalysis/min/Fries/04",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"salesAnalysis",
+						"min",
+						"Fries",
+						"04"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/salesAnalysis/average/Hotdog/03",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"salesAnalysis",
+						"average",
+						"Hotdog",
+						"03"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

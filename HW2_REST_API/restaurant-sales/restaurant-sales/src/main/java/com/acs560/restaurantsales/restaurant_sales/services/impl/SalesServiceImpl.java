@@ -13,23 +13,19 @@ import java.util.List;
 @Service
 public class SalesServiceImpl implements SalesService {
 
-    // Inject the SalesRepository
-    private final SalesRepository salesRepository;
-
     // Constructor-based injection
     public SalesServiceImpl(SalesRepository salesRepository) {
-        this.salesRepository = salesRepository;
     }
 
     @Override
     public List<Sales> getAllSales() {
-        return salesRepository.getSales();  // Fetch all sales from the repository
+        return SalesRepository.getSales();  // Fetch all sales from the repository
     }
 
     @Override
     public Sales getSaleByDate(String date) {
         // Find a sale by date from the repository (this will need a custom method in the repo)
-        return salesRepository.getSales()
+        return SalesRepository.getSales()
                 .stream()
                 .filter(sale -> sale.getDate().equals(date))
                 .findFirst()
@@ -39,7 +35,7 @@ public class SalesServiceImpl implements SalesService {
     @Override
     public List<Sales> getSalesByItemName(String itemName) {
         // Fetch sales filtered by item name from the repository
-        return salesRepository.getSales()
+        return SalesRepository.getSales()
                 .stream()
                 .filter(sale -> sale.getItemName().equalsIgnoreCase(itemName))
                 .toList();
@@ -48,7 +44,7 @@ public class SalesServiceImpl implements SalesService {
     @Override
     public double calculateMeanSales() {
         // Calculate the mean (average) sales
-        return salesRepository.getSales()
+        return SalesRepository.getSales()
                 .stream()
                 .mapToDouble(Sales::getTransactionAmount)
                 .average()

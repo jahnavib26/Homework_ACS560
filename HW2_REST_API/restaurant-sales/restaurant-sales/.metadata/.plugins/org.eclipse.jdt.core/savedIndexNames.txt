@@ -1,0 +1,2 @@
+INDEX VERSION 1.134+/Users/jahnavibollineni/Desktop/Software Engineering/Homework_ACS560-main/HW2_REST_API/restaurant-sales/restaurant-sales/.metadata/.plugins/org.eclipse.jdt.core
+1865797976.index

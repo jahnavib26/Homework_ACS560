@@ -1,0 +1,32 @@
+{
+	"info": {
+		"_postman_id": "96007e93-ecc8-40f0-8833-c0f61363d168",
+		"name": "HW4 Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17220210"
+	},
+	"item": [
+		{
+			"name": "Most Selling",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/salesAnalysis/most-selling",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"salesAnalysis",
+						"most-selling"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,7 +1,0 @@
-package com.acs560.restaurantsales.restaurant_sales.services;
-
-public interface SalesAnalysisService {
-    double calculateAverageSalesByItem(String itemName, String month);
-    double calculateAverageSalesByItem(String itemName, String month, int range);
-}
-

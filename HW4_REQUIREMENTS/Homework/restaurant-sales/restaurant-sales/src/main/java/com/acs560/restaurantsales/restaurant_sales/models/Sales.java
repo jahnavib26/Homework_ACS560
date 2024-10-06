@@ -14,6 +14,21 @@ public class Sales {
     private String staffGender;
     private String timeOfSale;
     private String yearMonth;
+    
+    /**
+     * Constructor for the Sales class.
+     *
+     * @param date the date of the sale
+     * @param itemName the name of the item sold
+     * @param itemType the type/category of the item sold
+     * @param itemPrice the price of the item sold
+     * @param quantity the quantity of the item sold
+     * @param transactionAmount the total transaction amount
+     * @param transactionType the type of transaction (e.g., cash, card)
+     * @param staffGender the gender of the staff member who processed the sale
+     * @param timeOfSale the time at which the sale occurred
+     * @param yearMonth the year and month of the sale, in 'YYYY-MM' format
+     */
 
     public Sales(LocalDate date, String itemName, String itemType, double itemPrice, int quantity, double transactionAmount,
                  String transactionType, String staffGender, String timeOfSale, String yearMonth) {

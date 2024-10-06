@@ -16,11 +16,20 @@ public class SalesRepository {
 
     private static List<Sales> salesList = new ArrayList<>();
 
+    /**
+     * Retrieve all sales data from the CSV file.
+     *
+     * @return a list of all sales records
+     */
     public static List<Sales> getSales() {
         loadSalesData(); // Load sales data from the CSV file
         return salesList;
     }
 
+    /**
+     * Load sales data from the CSV file and populate the salesList.
+     * This method clears the existing list before loading new data.
+     */
     public static void loadSalesData() {
         salesList.clear();  // Clear the list before loading new data
         try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/updated_restaurant_sales_data_6months.csv"))) {
@@ -56,49 +65,61 @@ public class SalesRepository {
         }
     }
 
+    /**
+     * Add a new sales record.
+     * 
+     * @param sales the sales record to be added
+     * @throws IllegalArgumentException if the sales data already exists
+     */
     public static void addSales(Sales sales) {
-        System.out.println("Adding sales: " + sales);  // Log the incoming sales object
         if (salesList.contains(sales)) {
             throw new IllegalArgumentException("Sales data already exists");
         }
         salesList.add(sales);
-        System.out.println("Sales added successfully: " + sales);
         appendSalesData(sales);  // Append only the new sale to the CSV file
     }
 
+    /**
+     * Update an existing sales record.
+     * 
+     * @param sales the sales record to be updated
+     * @throws IllegalArgumentException if the sales data is not found
+     */
     public static void updateSales(Sales sales) {
-        System.out.println("Attempting to update sales: " + sales);
         loadSalesData();  // Load the latest data from the CSV
         int index = findSalesIndex(sales);
         if (index == -1) {
-            System.out.println("Sales data not found for update: " + sales);
             throw new IllegalArgumentException("Sales data not found");
         }
-        System.out.println("Updating sales at index " + index + ": " + salesList.get(index));
         salesList.set(index, sales);  // Update the sales record at the found index
-        System.out.println("Sales updated successfully.");
-        rewriteCSV();  // Rewrites the updated data back into the CSV
+        rewriteCSV();  // Rewrite the updated data back into the CSV
     }
 
+    /**
+     * Delete an existing sales record.
+     * 
+     * @param sales the sales record to be deleted
+     * @throws IllegalArgumentException if the sales data is not found
+     */
     public static void deleteSales(Sales sales) {
-        System.out.println("Attempting to delete sales: " + sales);
         loadSalesData();  // Load the latest data from the CSV
         int index = findSalesIndex(sales);
         if (index == -1) {
-            System.out.println("Sales data not found for deletion: " + sales);
             throw new IllegalArgumentException("Sales data not found");
         }
-        System.out.println("Deleting sales at index " + index + ": " + salesList.get(index));  // Log the sale being deleted
         salesList.remove(index);
-        System.out.println("Sales deleted successfully.");
-        rewriteCSV();  // Rewrites the updated data back into the CSV
+        rewriteCSV();  // Rewrite the updated data back into the CSV
     }
 
+    /**
+     * Find the index of the sales record in the salesList.
+     * 
+     * @param sales the sales record to find
+     * @return the index of the sales record, or -1 if not found
+     */
     private static int findSalesIndex(Sales sales) {
-        System.out.println("Looking for sales to match: " + sales);
         for (int i = 0; i < salesList.size(); i++) {
             Sales s = salesList.get(i);
-            System.out.println("Comparing with sales in list: " + s);
 
             boolean dateMatches = s.getDate().equals(sales.getDate());
             boolean itemNameMatches = s.getItemName().equals(sales.getItemName());
@@ -106,27 +127,21 @@ public class SalesRepository {
             boolean quantityMatches = s.getQuantity() == sales.getQuantity();
             boolean transactionAmountMatches = Math.abs(s.getTransactionAmount() - sales.getTransactionAmount()) < 0.01;
 
-            System.out.println("Date match: " + dateMatches);
-            System.out.println("Item name match: " + itemNameMatches);
-            System.out.println("Item type match: " + itemTypeMatches);
-            System.out.println("Quantity match: " + quantityMatches);
-            System.out.println("Transaction amount match: " + transactionAmountMatches);
-
             if (dateMatches && itemNameMatches && itemTypeMatches && quantityMatches && transactionAmountMatches) {
-                System.out.println("Found matching sale at index " + i);
                 return i;  // Return the index if all fields match
             }
         }
-        System.out.println("No matching sale found for: " + sales);
         return -1;  // Return -1 if no matching sale is found
     }
 
-    // Append a single sale to the CSV file (for adding sales)
+    /**
+     * Append a new sales record to the CSV file.
+     * 
+     * @param sales the sales record to append
+     */
     private static void appendSalesData(Sales sales) {
         try (CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/updated_restaurant_sales_data_6months.csv", true))) { 
             // Open the file in append mode (true)
-
-            // Write only the new sales data (no header)
             writer.writeNext(new String[]{
                 sales.getDate().toString(),
                 sales.getItemName(),
@@ -139,23 +154,18 @@ public class SalesRepository {
                 sales.getTimeOfSale(),
                 sales.getYearMonth()
             });
-
-            System.out.println("Sales data appended successfully.");
         } catch (IOException e) {
-            System.out.println("Error appending sales data: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Rewrite the entire sales data in the CSV (for update and delete)
+    /**
+     * Rewrite all sales data back into the CSV file.
+     */
     private static void rewriteCSV() {
         try (CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/updated_restaurant_sales_data_6months.csv", false))) { 
             // Overwrite the file (false)
-
-            // Write the header
             writer.writeNext(new String[]{"Date", "Item Name", "Item Type", "Item Price", "Quantity", "Transaction Amount", "Transaction Type", "Staff Gender", "Time of Sale", "Year-Month"});
-
-            // Write all sales data
             for (Sales sales : salesList) {
                 writer.writeNext(new String[]{
                     sales.getDate().toString(),
@@ -170,9 +180,7 @@ public class SalesRepository {
                     sales.getYearMonth()
                 });
             }
-            System.out.println("Sales data saved successfully.");
         } catch (IOException e) {
-            System.out.println("Error saving sales data: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -16,7 +16,13 @@ public class SalesController {
 
     @Autowired
     private SalesService salesService;
-    
+
+    /**
+     * Get the list of all sales data.
+     *
+     * @return a list of sales data wrapped in a ResponseEntity with HTTP status OK,
+     * or an INTERNAL_SERVER_ERROR in case of an error
+     */
     @GetMapping
     public ResponseEntity<List<Sales>> getSales() {
         try {
@@ -27,8 +33,13 @@ public class SalesController {
         }
     }
 
-
-    // Add new sales data
+    /**
+     * Add new sales data.
+     *
+     * @param sales the sales data to be added
+     * @return a message indicating success or failure, wrapped in a ResponseEntity with appropriate HTTP status
+     * @throws IllegalArgumentException if the sales data already exists
+     */
     @PostMapping
     public ResponseEntity<String> addSales(@RequestBody Sales sales) {
         try {
@@ -41,7 +52,13 @@ public class SalesController {
         }
     }
 
-    // Update existing sales data
+    /**
+     * Update existing sales data.
+     *
+     * @param sales the sales data to be updated
+     * @return a message indicating success or failure, wrapped in a ResponseEntity with appropriate HTTP status
+     * @throws NoSuchElementException if the sales data to update is not found
+     */
     @PutMapping
     public ResponseEntity<String> updateSales(@RequestBody Sales sales) {
         try {
@@ -54,7 +71,13 @@ public class SalesController {
         }
     }
 
-    // Delete sales data
+    /**
+     * Delete sales data.
+     *
+     * @param sales the sales data to be deleted
+     * @return a message indicating success or failure, wrapped in a ResponseEntity with appropriate HTTP status
+     * @throws NoSuchElementException if the sales data to delete is not found
+     */
     @DeleteMapping
     public ResponseEntity<String> deleteSales(@RequestBody Sales sales) {
         try {

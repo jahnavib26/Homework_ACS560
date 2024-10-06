@@ -11,11 +11,23 @@ import com.acs560.restaurantsales.restaurant_sales.services.SalesService;
 @Service
 public class SalesServiceImpl implements SalesService {
 
+    /**
+     * Retrieves the list of all sales from the repository.
+     *
+     * @return a list of Sales objects
+     */
     @Override
     public List<Sales> getSales() {
         return SalesRepository.getSales();
     }
 
+    /**
+     * Adds a new sales entry to the repository.
+     *
+     * @param sales - the sales data to be added
+     * @throws IllegalArgumentException if the sales data already exists
+     * @throws RuntimeException if an error occurs while adding the sales data
+     */
     @Override
     public void addSales(Sales sales) {
         try {
@@ -27,6 +39,13 @@ public class SalesServiceImpl implements SalesService {
         }
     }
 
+    /**
+     * Updates an existing sales entry in the repository.
+     *
+     * @param sales - the sales data to be updated
+     * @throws NoSuchElementException if the sales data is not found
+     * @throws RuntimeException if an error occurs while updating the sales data
+     */
     @Override
     public void updateSales(Sales sales) {
         try {
@@ -38,6 +57,13 @@ public class SalesServiceImpl implements SalesService {
         }
     }
 
+    /**
+     * Deletes a sales entry from the repository.
+     *
+     * @param sales - the sales data to be deleted
+     * @throws NoSuchElementException if the sales data is not found
+     * @throws RuntimeException if an error occurs while deleting the sales data
+     */
     @Override
     public void deleteSales(Sales sales) {
         try {

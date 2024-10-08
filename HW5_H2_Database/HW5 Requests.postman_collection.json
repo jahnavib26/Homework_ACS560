@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "3ebf146b-6bed-41cb-b0d7-458c1e521efc",
+		"name": "HW5 Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17220210"
+	},
+	"item": [
+		{
+			"name": "Get All Sales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Element by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales/2023-04-02/Fries/Cash",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales",
+						"2023-04-02",
+						"Fries",
+						"Cash"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Element",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {\n        \"saleDate\": \"2023-07-01\",                \n        \"itemName\": \"Pasta\",                \n        \"transactionType\": \"Cash\"             \n    },\n    \"itemType\": \"Fast-food\",                      \n    \"itemPrice\": 15,                       \n    \"quantity\": 1,                           \n    \"transactionAmount\": 15,              \n    \"staffGender\": \"Male\",                   \n    \"timeOfSale\": \"Evening\",                \n    \"yearMonth\": \"2023-07\"                  \n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Element",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {\n        \"saleDate\": \"2023-07-01\",                \n        \"itemName\": \"Pasta\",                \n        \"transactionType\": \"Cash\"             \n    },\n    \"itemType\": \"Fast-food\",                      \n    \"itemPrice\": 15,                       \n    \"quantity\": 1,                           \n    \"transactionAmount\": 15,              \n    \"staffGender\": \"Female\",                   \n    \"timeOfSale\": \"Night\",                \n    \"yearMonth\": \"2023-07\"                  \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Element",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n    \"saleDate\": \"2023-07-01\",                \n    \"itemName\": \"Pasta\",                \n    \"transactionType\": \"Cash\"             \n}                ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Element by non-PK field",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sales/Fast-food/Night",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sales",
+						"Fast-food",
+						"Night"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

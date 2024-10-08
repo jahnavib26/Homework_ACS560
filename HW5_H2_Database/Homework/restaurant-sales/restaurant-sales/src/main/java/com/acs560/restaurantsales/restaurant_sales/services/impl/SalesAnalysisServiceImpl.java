@@ -10,116 +10,105 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.acs560.restaurantsales.restaurant_sales.models.Sales;
+import com.acs560.restaurantsales.restaurant_sales.entities.SalesEntity;
 import com.acs560.restaurantsales.restaurant_sales.repositories.SalesRepository;
 import com.acs560.restaurantsales.restaurant_sales.services.SalesAnalysisService;
 
+/**
+ * Implementation of the {@link SalesAnalysisService} interface that provides business logic
+ * for analyzing sales data, such as calculating minimum, maximum, and average sales, and finding the most selling product.
+ */
 @Service
 public class SalesAnalysisServiceImpl implements SalesAnalysisService {
 
-//	@Override
-//	public double calculateAverageSales(int month) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public double calculateAverageSalesRange(int month, int range) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public double getMinSales(int month) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public double getMaxSales(int month) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public String getMostSellingProduct() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+    @Autowired
+    SalesRepository salesRepository;
 
-//	@Autowired
-//	SalesRepository salesRepository;
-//	
-//	@Override
-//    public double calculateAverageSales(int month) {
-//        List<Sales> salesList = salesRepository.getSales();
-//
-//        // Filter sales for the given month and calculate the average transaction amount
-//        OptionalDouble average = salesList.stream()
-//                        .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
-//                        .mapToDouble(Sales::getTransactionAmount)
-//                        .average();
-//
-//        return average.orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month));
-//    }
-//
-//    @Override
-//    public double calculateAverageSalesRange(int month, int range) {
-//        List<Sales> salesList = salesRepository.getSales();
-//
-//        // Filter sales for the given range of months and calculate the average transaction amount
-//        OptionalDouble average = salesList.stream()
-//                        .filter(sales -> {
-//                            int salesMonth = getMonthFromYearMonth(sales.getYearMonth());
-//                            return salesMonth >= (month - range) && salesMonth <= (month + range);
-//                        })
-//                        .mapToDouble(Sales::getTransactionAmount)
-//                        .average();
-//
-//        return average.orElseThrow(() -> new NoSuchElementException("No sales data found for the specified range"));
-//    }
-//
-//    @Override
-//    public double getMinSales(int month) {
-//        List<Sales> salesList = salesRepository.getSales();
-//
-//        // Filter by the given month and find the minimum transaction amount
-//        return salesList.stream()
-//                .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
-//                .min(Comparator.comparingDouble(Sales::getTransactionAmount))
-//                .orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month))
-//                .getTransactionAmount();  // Return the transaction amount of the minimum sale
-//    }
-//
-//    @Override
-//    public double getMaxSales(int month) {
-//        List<Sales> salesList = salesRepository.getSales();
-//
-//        // Filter by the given month and find the maximum transaction amount
-//        return salesList.stream()
-//                .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
-//                .max(Comparator.comparingDouble(Sales::getTransactionAmount))
-//                .orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month))
-//                .getTransactionAmount();  // Return the transaction amount of the maximum sale
-//    }
-//
-//    public String getMostSellingProduct() {
-//        List<Sales> salesList = salesRepository.getSales();
-//        if (salesList.isEmpty()) {
-//            return "No sales data available.";
-//        }
-//
-//        return salesList.stream()
-//            .collect(Collectors.groupingBy(Sales::getItemName, Collectors.summingDouble(Sales::getTransactionAmount)))
-//            .entrySet()
-//            .stream()
-//            .max(Map.Entry.comparingByValue())
-//            .orElseThrow(() -> new NoSuchElementException("No sales data found"))
-//            .getKey();
-//    }
-//
-//    // Helper method to extract month from the Year-Month string (e.g., "2023-03")
-//    private int getMonthFromYearMonth(String yearMonth) {
-//        return Integer.parseInt(yearMonth.split("-")[1]);  // Extract the month as an integer
-//    }
+    /**
+     * Retrieves the minimum sales transaction amount for a specific month.
+     *
+     * @param month - The month for which to retrieve the minimum sales (1-12).
+     * @return The minimum transaction amount for the given month.
+     * @throws NoSuchElementException if no sales data is found for the specified month.
+     */
+    @Override
+    public double getMinSales(int month) {
+        List<SalesEntity> salesList = salesRepository.findAll();
+
+        return salesList.stream()
+                .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
+                .min(Comparator.comparingDouble(SalesEntity::getTransactionAmount))
+                .orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month))
+                .getTransactionAmount();
+    }
+
+    /**
+     * Retrieves the maximum sales transaction amount for a specific month.
+     *
+     * @param month - The month for which to retrieve the maximum sales (1-12).
+     * @return The maximum transaction amount for the given month.
+     * @throws NoSuchElementException if no sales data is found for the specified month.
+     */
+    @Override
+    public double getMaxSales(int month) {
+        List<SalesEntity> salesList = salesRepository.findAll();
+
+        return salesList.stream()
+                .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
+                .max(Comparator.comparingDouble(SalesEntity::getTransactionAmount))
+                .orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month))
+                .getTransactionAmount();
+    }
+
+    /**
+     * Retrieves the most selling product based on the total transaction amount.
+     *
+     * @return The name of the most selling product.
+     * @throws NoSuchElementException if no sales data is available.
+     */
+    @Override
+    public String getMostSellingProduct() {
+        List<SalesEntity> salesList = salesRepository.findAll();
+        if (salesList.isEmpty()) {
+            return "No sales data available.";
+        }
+
+        return salesList.stream()
+                .collect(Collectors.groupingBy(sales -> sales.getId().getItemName(),
+                        Collectors.summingDouble(SalesEntity::getTransactionAmount)))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .orElseThrow(() -> new NoSuchElementException("No sales data found"))
+                .getKey();
+    }
+
+    /**
+     * Calculates the average sales transaction amount for a specific month.
+     *
+     * @param month - The month for which to calculate the average sales (1-12).
+     * @return The average transaction amount for the given month.
+     * @throws NoSuchElementException if no sales data is found for the specified month.
+     */
+    @Override
+    public double calculateAverageSales(int month) {
+        List<SalesEntity> salesList = salesRepository.findAll();
+
+        OptionalDouble average = salesList.stream()
+                .filter(sales -> getMonthFromYearMonth(sales.getYearMonth()) == month)
+                .mapToDouble(SalesEntity::getTransactionAmount)
+                .average();
+
+        return average.orElseThrow(() -> new NoSuchElementException("No sales data found for month: " + month));
+    }
+
+    /**
+     * Helper method to extract the month from a "year-month" formatted string.
+     *
+     * @param yearMonth - The string in the format "YYYY-MM".
+     * @return The month as an integer.
+     */
+    private int getMonthFromYearMonth(String yearMonth) {
+        return Integer.parseInt(yearMonth.split("-")[1]);
+    }
 }

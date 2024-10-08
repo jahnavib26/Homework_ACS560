@@ -25,7 +25,7 @@ public interface SalesRepository extends CrudRepository<SalesEntity, SalesEntity
     List<SalesEntity> findAll();
 
     /**
-     * Saves a sales entity to the database.
+     * Saves a sales/updates entity to the database.
      * Overrides the save method of the {@link CrudRepository}.
      *
      * @param entity - The sales entity to be saved.

@@ -23,11 +23,11 @@ public class ItemDetailsForm extends FormLayout {
 
     private static final long serialVersionUID = 476310807171214015L;
 
+    private final TextField saleDate = new TextField("Sale Date");
     private final TextField itemName = new TextField("Item Name");
-    private final TextField itemType = new TextField("Item Type");
-    private final TextField quantity = new TextField("Quantity");
-    private final TextField transactionAmount = new TextField("Transaction Amount");
     private final ComboBox<String> transactionType = new ComboBox<>("Transaction Type");
+    private final TextField itemPrice = new TextField("Item Price");
+    
 
     private final Button save = new Button("Save");
     private final Button delete = new Button("Delete");
@@ -47,7 +47,7 @@ public class ItemDetailsForm extends FormLayout {
 
         binder.bindInstanceFields(this);
 
-        add(itemName, itemType, quantity, transactionAmount, transactionType, createButtonsLayout());
+        add(saleDate,itemName,transactionType, itemPrice ,createButtonsLayout());
         setWidth("25em");
     }
 
@@ -102,13 +102,17 @@ public class ItemDetailsForm extends FormLayout {
 
         if (itemDetails != null) {
             this.itemDetails = itemDetails;
+            saleDate.setValue(String.valueOf(itemDetails.getSaleDate()));
+            itemName.setValue(itemDetails.getItemName());
+            transactionType.setValue(itemDetails.getTransactionType());
+            itemPrice.setValue(String.valueOf(itemDetails.getItemPrice()));
+            
         } else {
             // Reset fields to defaults
+        	saleDate.setValue("");
             itemName.setValue("");
-            itemType.setValue("");
-            quantity.setValue("");
-            transactionAmount.setValue("");
             transactionType.clear();
+            itemPrice.setValue("");
             this.itemDetails = new ItemDetails();
         }
 

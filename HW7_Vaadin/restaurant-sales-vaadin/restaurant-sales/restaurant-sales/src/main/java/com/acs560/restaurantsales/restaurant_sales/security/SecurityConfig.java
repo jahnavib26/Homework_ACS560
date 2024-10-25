@@ -14,39 +14,32 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.acs560.restaurantsales.restaurant_sales.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
-@EnableWebSecurity
+@EnableWebSecurity 
 @Configuration
-public class SecurityConfig extends VaadinWebSecurity {
-    
+public class SecurityConfig extends VaadinWebSecurity { 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Allow access to images (e.g., for the logo or other public resources)
-        http.authorizeHttpRequests(auth -> auth
-            .requestMatchers(
-                AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/images/*.png")).permitAll());
-
-        // Secure the rest of the application
+        http.authorizeHttpRequests(auth ->
+                    auth.requestMatchers(
+                        AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/images/*.png")).permitAll());  
         super.configure(http);
-
-        // Define the login view for Vaadin
-        setLoginView(http, LoginView.class);
+        setLoginView(http, LoginView.class); 
     }
 
     @Bean
     public UserDetailsService users() {
-        // Create a simple in-memory user store with two users: "user" and "admin"
         UserDetails user = User.builder()
                 .username("user")
-                .password("{noop}userpass") // "{noop}" means no encoding (plain text password)
+                // password = password with this hash, don't tell anybody :-)
+                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
                 .roles("USER")
                 .build();
-
         UserDetails admin = User.builder()
                 .username("admin")
-                .password("{noop}adminpass")
+                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
                 .roles("USER", "ADMIN")
                 .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(user, admin); 
     }
 }

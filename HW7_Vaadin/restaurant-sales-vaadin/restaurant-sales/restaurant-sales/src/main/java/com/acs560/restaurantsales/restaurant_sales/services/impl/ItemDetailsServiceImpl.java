@@ -120,5 +120,17 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
         return itemDetailsList;
 	}
 
+	@Override
+	public void updateItemDetails(int id, ItemDetailsRequest idr) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteItemDetails(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

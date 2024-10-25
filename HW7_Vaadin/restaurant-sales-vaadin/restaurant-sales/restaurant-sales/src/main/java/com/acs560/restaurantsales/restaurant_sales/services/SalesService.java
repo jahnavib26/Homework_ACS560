@@ -59,4 +59,10 @@ public interface SalesService {
      * @return A list of sales data that match the specified attributes.
      */
     List<Sales> getSalesByIdNonPK(String itemType, String timeOfSale);
+
+	Sales add(Sales sales);
+
+	Sales update(Sales sales);
+
+	boolean delete(Sales sales);
 }

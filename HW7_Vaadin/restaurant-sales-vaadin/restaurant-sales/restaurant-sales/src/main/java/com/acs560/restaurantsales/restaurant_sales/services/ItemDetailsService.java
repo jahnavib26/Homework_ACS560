@@ -26,4 +26,10 @@ public interface ItemDetailsService {
 
 
 	List<ItemDetails> getItemDetailByPrice(Double itemPrice);
+
+
+	void updateItemDetails(int id, ItemDetailsRequest idr);
+
+
+	void deleteItemDetails(int id);
 }

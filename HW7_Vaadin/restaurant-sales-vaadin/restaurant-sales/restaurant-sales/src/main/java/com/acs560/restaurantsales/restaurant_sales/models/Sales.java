@@ -61,6 +61,10 @@ public class Sales {
     }
 
 
+	public Sales() {
+		// TODO Auto-generated constructor stub
+	}
+
 	// Getters and setters for each field
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }

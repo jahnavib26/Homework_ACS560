@@ -29,7 +29,11 @@ public class ItemDetails {
         this.itemPrice = itemDetailsEntity.getItemPrice();  
     }
     
-    public LocalDate getSaleDate() {
+    public ItemDetails() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public LocalDate getSaleDate() {
 		return saleDate;
 	}
 

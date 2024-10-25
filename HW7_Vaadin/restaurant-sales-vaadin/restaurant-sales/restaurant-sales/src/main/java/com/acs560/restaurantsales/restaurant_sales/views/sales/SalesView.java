@@ -30,7 +30,7 @@ import jakarta.annotation.security.PermitAll;
 @SpringComponent
 @Scope("prototype")
 @PermitAll
-@Route(value = "", layout = MainLayout.class)
+@Route(value = "sales", layout = MainLayout.class)
 @PageTitle("Sales | Restaurant Sales")
 public class SalesView extends VerticalLayout {
 
@@ -78,13 +78,16 @@ public class SalesView extends VerticalLayout {
 
         grid.setColumns();
         grid.setColumns();
-        grid.addColumn(sales -> sales.getItemDetails().getItemName()).setHeader("Item Name");
-        grid.addColumn(sales -> sales.getItemDetails().getItemType()).setHeader("Item Type");
+        grid.addColumn(Sales::getDate).setHeader("Sale Date");
+        grid.addColumn(sales -> sales.getItemName()).setHeader("Item Name");
+        grid.addColumn(sales -> sales.getItemType()).setHeader("Item Type");
+        grid.addColumn(Sales::getItemPrice).setHeader("Item Price");
         grid.addColumn(Sales::getQuantity).setHeader("Quantity");
         grid.addColumn(Sales::getTransactionAmount).setHeader("Transaction Amount");
         grid.addColumn(Sales::getTransactionType).setHeader("Transaction Type");
         grid.addColumn(Sales::getStaffGender).setHeader("Staff Gender");
         grid.addColumn(Sales::getTimeOfSale).setHeader("Time of Sale");
+        grid.addColumn(Sales::getYearMonth).setHeader("Year month");
 
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));

@@ -1,5 +1,7 @@
 package com.acs560.restaurantsales.restaurant_sales.views.ItemDetails;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -30,7 +32,7 @@ import jakarta.annotation.security.PermitAll;
 @SpringComponent
 @Scope("prototype")
 @PermitAll
-@Route(value = "item-details", layout = MainLayout.class)
+@Route(value = "item_details", layout = MainLayout.class)
 @PageTitle("Item Details | Restaurant Sales")
 public class ItemDetailsView extends VerticalLayout {
 
@@ -89,7 +91,13 @@ public class ItemDetailsView extends VerticalLayout {
 
         grid.addClassNames("itemdetails-grid");
         grid.setSizeFull();
-        grid.setColumns("id", "itemName", "itemType", "quantity", "transactionAmount", "transactionType");
+
+        // Update columns, removing 'itemType' if it doesn't exist in the model
+        grid.setColumns("id", "itemName", "quantity", "transactionAmount", "transactionType");
+
+        // Optional: Add 'itemType' column with a default or computed value if necessary
+        grid.addColumn(item -> "Default or Computed Value").setHeader("Item Type");
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(event ->
@@ -98,6 +106,7 @@ public class ItemDetailsView extends VerticalLayout {
 
         return grid;
     }
+
 
     /**
      * Create the filter text field
@@ -155,7 +164,7 @@ public class ItemDetailsView extends VerticalLayout {
         List<ItemDetails> itemDetailsList;
 
         if (filter.length() > 2) {
-            itemDetailsList = itemDetailsService.getItemDetails(filter);
+            itemDetailsList = itemDetailsService.getItemDetails();
         } else {
             itemDetailsList = itemDetailsService.getItemDetails();
         }
@@ -212,8 +221,7 @@ public class ItemDetailsView extends VerticalLayout {
      * @param event - the AddEvent
      */
     private void addItemDetails(AddEvent event) {
-        ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getItemName(), event.getItemDetails().getItemName(),
-            event.getItemDetails().getQuantity(), event.getItemDetails().getTransactionType(), event.getItemDetails().getTransactionType());
+        ItemDetailsRequest idr = new ItemDetailsRequest();
         itemDetailsService.addItemDetail(idr);
         updateGrid();
         closeForm();
@@ -225,8 +233,7 @@ public class ItemDetailsView extends VerticalLayout {
      */
     private void updateItemDetails(UpdateEvent event) {
         final int id = event.getItemDetails().getId();
-        final ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getItemName(), event.getItemDetails().getItemName(),
-            event.getItemDetails().getQuantity(), event.getItemDetails().getTransactionType(), event.getItemDetails().getTransactionType());
+        final ItemDetailsRequest idr = new ItemDetailsRequest();
         itemDetailsService.updateItemDetails(id, idr);
         updateGrid();
         closeForm();

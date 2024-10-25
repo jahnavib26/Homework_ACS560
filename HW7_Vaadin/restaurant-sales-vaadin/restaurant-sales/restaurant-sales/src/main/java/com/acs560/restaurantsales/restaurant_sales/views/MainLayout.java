@@ -66,7 +66,7 @@ public class MainLayout extends AppLayout {
     private void createDrawer() {
     	RouterLink salesLink = new RouterLink("Sales", SalesView.class);
     	salesLink.setHighlightCondition(HighlightConditions.sameLocation());
-
+//
         RouterLink itemDetailsLink = new RouterLink("ItemDetails", ItemDetailsView.class);
         
         addToDrawer(new VerticalLayout(salesLink, itemDetailsLink));

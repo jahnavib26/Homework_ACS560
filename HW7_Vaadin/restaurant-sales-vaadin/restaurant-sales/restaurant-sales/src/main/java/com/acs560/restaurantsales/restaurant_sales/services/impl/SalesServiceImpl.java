@@ -127,4 +127,47 @@ public class SalesServiceImpl implements SalesService {
         List<SalesEntity> salesByIdNonPK = salesRepository.getSalesByNonPK(itemType, timeOfSale);
         return from(salesByIdNonPK);
     }
+
+	@Override
+	public Sales add(Sales sales) {
+		// TODO Auto-generated method stub
+		Sales addedSales = null;
+		
+		SalesEntity saleToAdd = new SalesEntity(sales);
+		
+		if (!salesRepository.existsById(saleToAdd.getId())) {
+			var salesEntity = salesRepository.save(saleToAdd);
+			addedSales = new Sales(salesEntity);
+		}
+
+		return addedSales;
+	}
+
+	@Override
+	public Sales update(Sales sales) {
+		// TODO Auto-generated method stub
+		Sales updatedSales = null;
+		
+		SalesEntity billToUpdate = new SalesEntity(sales);
+		
+		if (salesRepository.existsById(billToUpdate.getId())) {
+			var updatedSalesEntity = salesRepository.save(new SalesEntity(sales));
+			updatedSales = new Sales(updatedSalesEntity);
+		}
+
+		return updatedSales;
+	}
+
+	@Override
+	public boolean delete(Sales sales) {
+		// TODO Auto-generated method stub
+		boolean isDeleted = false;
+		SalesEntity billToDelete = new SalesEntity(sales);
+		
+		if (salesRepository.existsById(billToDelete.getId())) {
+			salesRepository.delete(new SalesEntity(sales));
+			isDeleted = true;
+		}
+		return isDeleted;
+	}
 }

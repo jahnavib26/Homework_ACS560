@@ -1,5 +1,8 @@
 package com.acs560.restaurantsales.restaurant_sales.views.sales;
 
+import java.util.List;
+
+import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
 import com.acs560.restaurantsales.restaurant_sales.models.Sales;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -22,11 +25,18 @@ import com.vaadin.flow.shared.Registration;
 public class SalesForm extends FormLayout {
 
     private static final long serialVersionUID = 476310807171214015L;
-
+    
+    private final TextField saleDate = new TextField("Sale Date");
     private final TextField itemName = new TextField("Item Name");
+    private final TextField itemType = new TextField("Item Type");
+    private final TextField itemPrice = new TextField("Item Price");
     private final TextField quantity = new TextField("Quantity");
-    private final TextField transactionAmount = new TextField("Transaction Amount");
     private final ComboBox<String> transactionType = new ComboBox<>("Transaction Type");
+
+    private final TextField transactionAmount = new TextField("Transaction Amount");
+    private final TextField staffGender = new TextField("Staff Gender");
+    private final TextField timeOfSale = new TextField("Time of sale");
+    private final TextField yearMonth = new TextField("Year month");
 
     private final Button save = new Button("Save");
     private final Button delete = new Button("Delete");
@@ -39,14 +49,14 @@ public class SalesForm extends FormLayout {
     /**
      * Constructor
      */
-    public SalesForm() {
+    public SalesForm(List<ItemDetails> itemDetails) {
         addClassName("sales-form");
 
         transactionType.setItems("Cash", "Online", "Others");
 
         binder.bindInstanceFields(this);
 
-        add(itemName, quantity, transactionAmount, transactionType, createButtonsLayout());
+        add(saleDate,itemName,transactionType,itemType,itemPrice, quantity, transactionAmount, staffGender,timeOfSale,yearMonth, createButtonsLayout());
         setWidth("25em");
     }
 
@@ -93,7 +103,7 @@ public class SalesForm extends FormLayout {
      * @param sales - the sales object
      * @param isAdd - true indicates add, otherwise update
      */
-    public void update(Sales sales, boolean isAdd) {
+    public void update(Sales sales,List<ItemDetails> itemDetails, boolean isAdd) {
         this.isAdd = isAdd;
 
         // Set whether the delete button is visible
@@ -103,10 +113,17 @@ public class SalesForm extends FormLayout {
             this.sales = sales;
 
             // Set fields with values from the existing sales object
+            saleDate.setValue(String.valueOf(sales.getDate()));
             itemName.setValue(sales.getItemName());
-            quantity.setValue(String.valueOf(sales.getQuantity()));  // Convert int to String
-            transactionAmount.setValue(String.valueOf(sales.getTransactionAmount()));  // Convert double to String
             transactionType.setValue(sales.getTransactionType());
+            itemType.setValue(sales.getItemType());
+            itemPrice.setValue(String.valueOf(sales.getItemPrice()));
+            quantity.setValue(String.valueOf(sales.getQuantity()));  // Convert int to String
+            transactionAmount.setValue(String.valueOf(sales.getTransactionAmount()));  
+            staffGender.setValue(sales.getStaffGender());
+            timeOfSale.setValue(sales.getTimeOfSale());
+            yearMonth.setValue(sales.getYearMonth());
+            
         } else {
             // Reset fields to defaults
             itemName.setValue("");

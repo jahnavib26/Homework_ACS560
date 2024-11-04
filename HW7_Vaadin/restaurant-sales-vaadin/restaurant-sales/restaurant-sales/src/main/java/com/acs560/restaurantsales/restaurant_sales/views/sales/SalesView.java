@@ -1,5 +1,7 @@
 package com.acs560.restaurantsales.restaurant_sales.views.sales;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -38,12 +40,13 @@ public class SalesView extends VerticalLayout {
 
     @Autowired
     private SalesService salesService;
-    @Autowired
+   
     private ItemDetailsService itemDetailsService;
 
     private final Grid<Sales> grid;
     private final TextField filterText;
     private final SalesForm salesForm;
+    private boolean filtering = false;
 
     /**
      * Constructor Builds this component
@@ -103,7 +106,7 @@ public class SalesView extends VerticalLayout {
      * @return - the sales form
      */
     private SalesForm createForm() {
-        SalesForm salesForm = new SalesForm(itemDetailsService.getItemDetails());
+        SalesForm salesForm = new SalesForm();
         salesForm.addListener(AddEvent.class, this::addSale);
         salesForm.addListener(DeleteEvent.class, this::deleteSale);
         salesForm.addListener(CancelEvent.class, e -> closeForm());
@@ -224,6 +227,20 @@ public class SalesView extends VerticalLayout {
      * Handler for the filter text change listener
      */
     private void handleFilter() {
-        // TODO: Implement filter logic
+    	System.out.print("Inside handle filter");
+//    	if (!filtering) {
+//    		return;
+//    	}
+    	System.out.print("Inside handle filter 2");
+    	String filter = filterText.getValue();
+    	List<Sales> sales;
+    	
+    	if (filter.length() > 2) {
+    		sales = salesService.getSalesByItemName(filter);
+    	} else {
+    		sales = salesService.getSales();
+    	}
+    	
+    	grid.setItems(sales);
     }
 }

@@ -170,4 +170,11 @@ public class SalesServiceImpl implements SalesService {
 		}
 		return isDeleted;
 	}
+
+	@Override
+	public List<Sales> getSalesByItemName(String itemName) {
+		// TODO Auto-generated method stub
+		List<SalesEntity> salesByIdNonPK = salesRepository.getSalesByItemName(itemName);
+        return from(salesByIdNonPK);
+	}
 }

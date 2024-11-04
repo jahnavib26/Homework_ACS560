@@ -19,13 +19,25 @@ public class ItemDetailsRequest {
     @NotEmpty(message = "Item name is required")
     private String itemName;
 
+    @NotEmpty(message = "Transaction type is required")
+    private String transactionType;
+    
     @NotNull(message = "Item price is required") 
     private Double itemPrice;
 
-    @NotEmpty(message = "Transaction type is required")
-    private String transactionType;
+    public ItemDetailsRequest(LocalDate saleDate, String itemName, String transactionType, double itemPrice) {
+		// TODO Auto-generated constructor stub
+    	this.saleDate=saleDate;
+    	this.itemName=itemName;
+    	this.transactionType=transactionType;
+    	this.itemPrice = itemPrice;
+	}
 
-    // Getters and Setters
+	public ItemDetailsRequest() {
+		// TODO Auto-generated constructor stub
+	}
+
+	// Getters and Setters
     public String getItemName() {
         return itemName;
     }

@@ -20,13 +20,13 @@ public class SalesEntity {
     private String itemType;	
 
     @Column(name = "item_price")
-    private double itemPrice;
+    private Double itemPrice;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "transaction_amount")
-    private double transactionAmount;
+    private Double transactionAmount;
 
     @Column(name = "staff_gender")
     private String staffGender;
@@ -79,7 +79,7 @@ public class SalesEntity {
      * 
      * @return The item price.
      */
-    public double getItemPrice() {
+    public Double getItemPrice() {
         return itemPrice;
     }
 
@@ -88,7 +88,7 @@ public class SalesEntity {
      * 
      * @param itemPrice - The item price to set.
      */
-    public void setItemPrice(double itemPrice) {
+    public void setItemPrice(Double itemPrice) {
         this.itemPrice = itemPrice;
     }
 
@@ -97,7 +97,7 @@ public class SalesEntity {
      * 
      * @return The quantity of items sold.
      */
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
@@ -106,7 +106,7 @@ public class SalesEntity {
      * 
      * @param quantity - The quantity to set.
      */
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -115,7 +115,7 @@ public class SalesEntity {
      * 
      * @return The transaction amount.
      */
-    public double getTransactionAmount() {
+    public Double getTransactionAmount() {
         return transactionAmount;
     }
 
@@ -124,7 +124,7 @@ public class SalesEntity {
      * 
      * @param transactionAmount - The transaction amount to set.
      */
-    public void setTransactionAmount(double transactionAmount) {
+    public void setTransactionAmount(Double transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 

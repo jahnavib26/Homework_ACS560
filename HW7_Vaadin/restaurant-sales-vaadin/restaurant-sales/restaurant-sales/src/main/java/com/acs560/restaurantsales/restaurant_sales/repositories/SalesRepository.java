@@ -88,5 +88,11 @@ public interface SalesRepository extends CrudRepository<SalesEntity, SalesEntity
             """, nativeQuery = true)
 	Optional<SalesEntity> findByTransactionTypeAndItemName(String transactionType, String itemName, LocalDate saleDate);
 
+    @Query(value = """
+            SELECT * FROM sales 
+            WHERE item_name = :itemName
+            """, nativeQuery = true)
+	List<SalesEntity> getSalesByItemName(String itemName);
+
 	
 }

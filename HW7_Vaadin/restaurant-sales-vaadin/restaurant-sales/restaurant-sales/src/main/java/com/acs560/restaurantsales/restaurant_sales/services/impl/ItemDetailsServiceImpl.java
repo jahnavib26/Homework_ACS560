@@ -19,118 +19,129 @@ import com.acs560.restaurantsales.restaurant_sales.requests.ItemDetailsRequest;
 import com.acs560.restaurantsales.restaurant_sales.services.ItemDetailsService; // Updated interface import
 
 @Service
-public class ItemDetailsServiceImpl implements ItemDetailsService { 
+public class ItemDetailsServiceImpl implements ItemDetailsService {
 
-    private final ItemDetailsRepository itemDetailsRepository;
-    private final SalesRepository salesRepository;
+	@Autowired
+	ItemDetailsRepository itemDetailsRepository;
 
-    @Autowired
-    public ItemDetailsServiceImpl(ItemDetailsRepository itemDetailsRepository, SalesRepository salesRepository) {
-        this.itemDetailsRepository = itemDetailsRepository; 
-        this.salesRepository = salesRepository;
-    }
+	@Autowired
+	SalesRepository salesRepository;
 
-    @Override
-    public List<ItemDetails> getItemDetails() {
-        var itemDetailsEntities = itemDetailsRepository.findAll(); 
-        List<ItemDetails> itemDetailsList = new ArrayList<>();
-        itemDetailsEntities.forEach(ide -> itemDetailsList.add(new ItemDetails(ide))); 
+//    @Autowired
+//    public ItemDetailsServiceImpl(ItemDetailsRepository itemDetailsRepository, SalesRepository salesRepository) {
+//        this.itemDetailsRepository = itemDetailsRepository; 
+//        this.salesRepository = salesRepository;
+//    }
 
-        return itemDetailsList;
-    }
+	@Override
+	public List<ItemDetails> getItemDetails() {
+		var itemDetailsEntities = itemDetailsRepository.findAll();
+		List<ItemDetails> itemDetailsList = new ArrayList<>();
+		itemDetailsEntities.forEach(ide -> itemDetailsList.add(new ItemDetails(ide)));
 
-    @Override
-    public Optional<ItemDetails> getItemDetail(LocalDate saleDate,String itemName, String transactionType) {
-        var itemDetailsEntityOpt = itemDetailsRepository.findById(new SalesEntityId(saleDate, itemName, transactionType));
-      
-        return itemDetailsEntityOpt.map(ItemDetails::new); 
-    }
+		return itemDetailsList;
+	}
 
-    @Override
-    public ItemDetails addItemDetail(ItemDetailsRequest request) {
-    	
-       
-        Optional<SalesEntity> salesEntityOpt = salesRepository.findByTransactionTypeAndItemName(
-            request.getTransactionType(), request.getItemName(),request.getSaleDate());
+	@Override
+	public Optional<ItemDetails> getItemDetail(LocalDate saleDate, String itemName, String transactionType) {
+		var itemDetailsEntityOpt = itemDetailsRepository
+				.findById(new SalesEntityId(saleDate, itemName, transactionType));
 
-        if (salesEntityOpt.isPresent()) {
-            SalesEntity salesEntity = salesEntityOpt.get();
-            ItemDetailsEntity itemDetailsToAdd = new ItemDetailsEntity(
-                new SalesEntityId(request.getSaleDate(), request.getItemName(), request.getTransactionType()),
-                request.getItemPrice(),
-                salesEntity
-            );
-            
-            ItemDetailsEntity itemDetailsEntity = itemDetailsRepository.save(itemDetailsToAdd); 
-            return new ItemDetails(itemDetailsEntity); 
-        } else {
-        	System.out.print("Printing in else condition");
-            throw new IllegalArgumentException("Related SalesEntity not found");
-        }
-    }
+		return itemDetailsEntityOpt.map(ItemDetails::new);
+	}
 
-    @Override
-    public ItemDetails updateItemDetail(LocalDate saleDate, String itemName, String transactionType, ItemDetailsRequest request) {
-    	
-        ItemDetails updatedItemDetails = null;
-         
-        if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) { 
-        	
-        	  // Fetch the related SalesEntity
-            Optional<SalesEntity> salesEntityOpt = salesRepository.findByTransactionTypeAndItemName(
-            		request.getTransactionType(), request.getItemName(),request.getSaleDate());
+	@Override
+	public ItemDetails addItemDetail(ItemDetailsRequest request) {
+		System.out.print("Printing in addItemDetails");
+		System.out.print(request.getSaleDate());
+		Optional<SalesEntity> salesEntityOpt = salesRepository.findByTransactionTypeAndItemName(
+				request.getTransactionType(), request.getItemName(), request.getSaleDate());
 
-            if (salesEntityOpt.isPresent()) {
-                SalesEntity salesEntity = salesEntityOpt.get();
-                
-                var itemDetailsEntity = new ItemDetailsEntity(
-                    new SalesEntityId(saleDate, itemName, transactionType),
-                    request.getItemPrice(),
-                    salesEntity
-                );
-                itemDetailsEntity = itemDetailsRepository.save(itemDetailsEntity); 
-                updatedItemDetails = new ItemDetails(itemDetailsEntity); 
-            } else {
-               throw new IllegalArgumentException("Related SalesEntity not found");
-            }
-        }
+		if (salesEntityOpt.isPresent()) {
+			SalesEntity salesEntity = salesEntityOpt.get();
+			ItemDetailsEntity itemDetailsToAdd = new ItemDetailsEntity(
+					new SalesEntityId(request.getSaleDate(), request.getItemName(), request.getTransactionType()),
+					request.getItemPrice(), salesEntity);
 
-        return updatedItemDetails; 
-    }
+			ItemDetailsEntity itemDetailsEntity = itemDetailsRepository.save(itemDetailsToAdd);
+			return new ItemDetails(itemDetailsEntity);
+		} else {
+			System.out.print("Printing in else condition");
+			throw new IllegalArgumentException("Related SalesEntity not found");
+		}
+	}
 
-    @Override
-    public boolean deleteItemDetail(String itemName, String transactionType, LocalDate saleDate) { 
-        boolean isDeleted = false;
+	@Override
+	public ItemDetails updateItemDetail(LocalDate saleDate, String itemName, String transactionType,
+			ItemDetailsRequest request) {
 
-        if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) { 
-            itemDetailsRepository.deleteById(new SalesEntityId(saleDate, itemName, transactionType)); 
-            isDeleted = true;
-        }
+		ItemDetails updatedItemDetails = null;
+		System.out.print("\nInside updateitemDetails\n");
+		System.out.print(request.getItemPrice());
 
-        return isDeleted; 
-    }
+		if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) {
+
+			// Fetch the related SalesEntity
+			Optional<SalesEntity> salesEntityOpt = salesRepository.findByTransactionTypeAndItemName(
+					request.getTransactionType(), request.getItemName(), request.getSaleDate());
+
+			if (salesEntityOpt.isPresent()) {
+				SalesEntity salesEntity = salesEntityOpt.get();
+
+				var itemDetailsEntity = new ItemDetailsEntity(new SalesEntityId(saleDate, itemName, transactionType),
+						request.getItemPrice(), salesEntity);
+				itemDetailsEntity = itemDetailsRepository.save(itemDetailsEntity);
+				updatedItemDetails = new ItemDetails(itemDetailsEntity);
+			} else {
+				throw new IllegalArgumentException("Related SalesEntity not found");
+			}
+		}
+
+		return updatedItemDetails;
+	}
+
+	@Override
+	public boolean deleteItemDetail(String itemName, String transactionType, LocalDate saleDate) {
+		boolean isDeleted = false;
+
+		if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) {
+			itemDetailsRepository.deleteById(new SalesEntityId(saleDate, itemName, transactionType));
+			isDeleted = true;
+		}
+
+		return isDeleted;
+	}
 
 	@Override
 	public List<ItemDetails> getItemDetailByPrice(Double itemPrice) {
 		// TODO Auto-generated method stub
-		var itemDetailsEntities = itemDetailsRepository.findByNonPk(itemPrice); 
-        List<ItemDetails> itemDetailsList = new ArrayList<>();
-        itemDetailsEntities.forEach(ide -> itemDetailsList.add(new ItemDetails(ide))); 
+		var itemDetailsEntities = itemDetailsRepository.findByNonPk(itemPrice);
+		List<ItemDetails> itemDetailsList = new ArrayList<>();
+		itemDetailsEntities.forEach(ide -> itemDetailsList.add(new ItemDetails(ide)));
 
-        return itemDetailsList;
+		return itemDetailsList;
 	}
 
 	@Override
 	public void updateItemDetails(int id, ItemDetailsRequest idr) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteItemDetails(int id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
+	@Override
+	public List<ItemDetails> getItemDetailsByItemName(String itemName) {
+		// TODO Auto-generated method stub
+		var itemDetailsEntities = itemDetailsRepository.findByItemName(itemName);
+		List<ItemDetails> itemDetailsList = new ArrayList<>();
+		itemDetailsEntities.forEach(ide -> itemDetailsList.add(new ItemDetails(ide)));
+
+		return itemDetailsList;
+	}
+
 }

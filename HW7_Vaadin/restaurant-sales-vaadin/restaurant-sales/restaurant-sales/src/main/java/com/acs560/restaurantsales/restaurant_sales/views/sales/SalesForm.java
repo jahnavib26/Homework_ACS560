@@ -1,6 +1,9 @@
 package com.acs560.restaurantsales.restaurant_sales.views.sales;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
 import com.acs560.restaurantsales.restaurant_sales.models.Sales;
@@ -14,10 +17,14 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.data.converter.StringToDoubleConverter;
+import com.vaadin.flow.data.converter.StringToIntegerConverter;
+
 
 /**
  * The form to manage sales data.
@@ -26,14 +33,14 @@ public class SalesForm extends FormLayout {
 
     private static final long serialVersionUID = 476310807171214015L;
     
-    private final TextField saleDate = new TextField("Sale Date");
+//    private final TextField saleDate = new TextField("Sale Date");
+    private final DatePicker saleDate = new DatePicker("Sale Date");
     private final TextField itemName = new TextField("Item Name");
     private final TextField itemType = new TextField("Item Type");
     private final TextField itemPrice = new TextField("Item Price");
     private final TextField quantity = new TextField("Quantity");
-    private final ComboBox<String> transactionType = new ComboBox<>("Transaction Type");
-
     private final TextField transactionAmount = new TextField("Transaction Amount");
+    private final ComboBox<String> transactionType = new ComboBox<>("Transaction Type");
     private final TextField staffGender = new TextField("Staff Gender");
     private final TextField timeOfSale = new TextField("Time of sale");
     private final TextField yearMonth = new TextField("Year month");
@@ -45,16 +52,44 @@ public class SalesForm extends FormLayout {
     private final Binder<Sales> binder = new BeanValidationBinder<>(Sales.class);
     private Sales sales;
     private boolean isAdd;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Constructor
      */
-    public SalesForm(List<ItemDetails> itemDetails) {
+    public SalesForm() {
         addClassName("sales-form");
 
         transactionType.setItems("Cash", "Online", "Others");
+        saleDate.setLocale(Locale.US); // Adjust locale as needed
 
-        binder.bindInstanceFields(this);
+        // Add a ValueChangeListener to format the date
+        saleDate.addValueChangeListener(event -> {
+            LocalDate selectedDate = event.getValue();
+            if (selectedDate != null) {
+                saleDate.setPlaceholder(selectedDate.format(formatter));
+            }
+        });
+
+        binder.forField(saleDate).bind(Sales::getDate, Sales::setDate);
+        binder.forField(itemName).bind(Sales::getItemName, Sales::setItemName);
+        binder.forField(transactionType).bind(Sales::getTransactionType, Sales::setTransactionType);
+        binder.forField(itemType).bind(Sales::getItemType, Sales::setItemType);
+        binder.forField(itemPrice)
+        .withConverter(new StringToDoubleConverter("Please enter a valid number"))
+        .bind(Sales::getItemPrice, Sales::setItemPrice);
+        binder.forField(quantity)
+        .withConverter(new StringToIntegerConverter("Please enter a valid number"))
+        .bind(Sales::getQuantity, Sales::setQuantity);
+        
+        binder.forField(transactionAmount)
+        .withConverter(new StringToDoubleConverter("Please enter a valid number"))
+        .bind(Sales::getTransactionAmount, Sales::setTransactionAmount);
+        
+        binder.forField(staffGender).bind(Sales::getStaffGender, Sales::setStaffGender);
+        binder.forField(timeOfSale).bind(Sales::getTimeOfSale, Sales::setTimeOfSale);
+        binder.forField(yearMonth).bind(Sales::getYearMonth, Sales::setYearMonth);
+        
 
         add(saleDate,itemName,transactionType,itemType,itemPrice, quantity, transactionAmount, staffGender,timeOfSale,yearMonth, createButtonsLayout());
         setWidth("25em");
@@ -84,10 +119,17 @@ public class SalesForm extends FormLayout {
      * Handler for save action
      */
     private void handleSave() {
+    	System.out.print("Printing in handleSave");
+    	System.out.print("In handlesave printing");
+        System.out.print(sales.getItemName());
+        System.out.print(sales.getDate());
+        System.out.print(sales.getItemPrice());
         try {
             binder.writeBean(sales);
 
             if (isAdd) {
+            	System.out.print("Printing in handleSave if condition");
+            	System.out.print(sales);
                 fireEvent(new AddEvent(this, sales));
             } else {
                 fireEvent(new UpdateEvent(this, sales));
@@ -113,7 +155,7 @@ public class SalesForm extends FormLayout {
             this.sales = sales;
 
             // Set fields with values from the existing sales object
-            saleDate.setValue(String.valueOf(sales.getDate()));
+            saleDate.setValue(sales.getDate());
             itemName.setValue(sales.getItemName());
             transactionType.setValue(sales.getTransactionType());
             itemType.setValue(sales.getItemType());

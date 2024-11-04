@@ -3,6 +3,8 @@ package com.acs560.restaurantsales.restaurant_sales.services;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import com.acs560.restaurantsales.restaurant_sales.entities.ItemDetailsEntity;
 import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails; // Updated import
 import com.acs560.restaurantsales.restaurant_sales.requests.ItemDetailsRequest;
 
@@ -32,4 +34,7 @@ public interface ItemDetailsService {
 
 
 	void deleteItemDetails(int id);
+
+
+	List<ItemDetails> getItemDetailsByItemName(String itemName);
 }

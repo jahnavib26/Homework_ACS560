@@ -59,6 +59,14 @@ public interface SalesService {
      * @return A list of sales data that match the specified attributes.
      */
     List<Sales> getSalesByIdNonPK(String itemType, String timeOfSale);
+    
+    /**
+     * Retrieves sales records based on item name.
+     *
+     * @param itemName - The type of the item (e.g., food, beverage).
+     * @return A list of sales data that match the specified item name.
+     */
+    List<Sales> getSalesByItemName(String itemName);
 
 	Sales add(Sales sales);
 

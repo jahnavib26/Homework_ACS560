@@ -96,6 +96,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 		
 		//Displaying these as helper...don't do this in prod
 //		add(new Span("Username: user, Password: userpass"));
+//		add(new Span("Username: admin, Password: adminpass"));
 		add(new Span("Username: user, Password: password"));
 		add(login);
 	}

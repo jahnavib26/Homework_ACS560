@@ -19,7 +19,7 @@ public class ItemDetails {
 
 	private String itemName;
     private String transactionType;
-    private double itemPrice;
+    private Double itemPrice;
 
    
     public ItemDetails(ItemDetailsEntity itemDetailsEntity) {
@@ -29,9 +29,17 @@ public class ItemDetails {
         this.itemPrice = itemDetailsEntity.getItemPrice();  
     }
     
-    public ItemDetails() {
+    public ItemDetails(LocalDate saleDate, String itemName, String transactionType, Double itemPrice) {
 		// TODO Auto-generated constructor stub
+    	this.saleDate = saleDate;
+    	this.itemName = itemName;
+    	this.transactionType = transactionType;
+    	this.itemPrice = itemPrice;
 	}
+    
+    public ItemDetails() {
+//    	super();
+    }
 
 	public LocalDate getSaleDate() {
 		return saleDate;
@@ -57,11 +65,11 @@ public class ItemDetails {
 		this.transactionType = transactionType;
 	}
 
-	public double getItemPrice() {
+	public Double getItemPrice() {
 		return itemPrice;
 	}
 
-	public void setItemPrice(double itemPrice) {
+	public void setItemPrice(Double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
 

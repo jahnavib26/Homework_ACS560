@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
+import com.acs560.restaurantsales.restaurant_sales.entities.ItemDetailsEntity;
 import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
 import com.acs560.restaurantsales.restaurant_sales.requests.ItemDetailsRequest;
 import com.acs560.restaurantsales.restaurant_sales.services.ItemDetailsService;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -38,7 +40,7 @@ public class ItemDetailsView extends VerticalLayout {
 
     private static final long serialVersionUID = 6436483924131073477L;
 
-    @Autowired
+//    @Autowired 
     private ItemDetailsService itemDetailsService;
 
     private final Grid<ItemDetails> grid;
@@ -88,16 +90,15 @@ public class ItemDetailsView extends VerticalLayout {
      */
     private Grid<ItemDetails> createGrid() {
         Grid<ItemDetails> grid = new Grid<>(ItemDetails.class);
+        grid.setSizeFull();
 
         grid.addClassNames("itemdetails-grid");
         grid.setSizeFull();
-
-        // Update columns, removing 'itemType' if it doesn't exist in the model
-        grid.setColumns("id", "itemName", "quantity", "transactionAmount", "transactionType");
-
-        // Optional: Add 'itemType' column with a default or computed value if necessary
-        grid.addColumn(item -> "Default or Computed Value").setHeader("Item Type");
-
+        grid.setColumns();
+        grid.addColumn(ItemDetails::getSaleDate).setHeader("Sale Date");
+        grid.addColumn(ItemDetails::getItemName).setHeader("Item name");
+        grid.addColumn(ItemDetails::getTransactionType).setHeader("Transaction Type");
+        grid.addColumn(ItemDetails::getItemPrice).setHeader("Item price");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(event ->
@@ -106,7 +107,6 @@ public class ItemDetailsView extends VerticalLayout {
 
         return grid;
     }
-
 
     /**
      * Create the filter text field
@@ -164,7 +164,7 @@ public class ItemDetailsView extends VerticalLayout {
         List<ItemDetails> itemDetailsList;
 
         if (filter.length() > 2) {
-            itemDetailsList = itemDetailsService.getItemDetails();
+            itemDetailsList = itemDetailsService.getItemDetailsByItemName(filter);
         } else {
             itemDetailsList = itemDetailsService.getItemDetails();
         }
@@ -221,7 +221,7 @@ public class ItemDetailsView extends VerticalLayout {
      * @param event - the AddEvent
      */
     private void addItemDetails(AddEvent event) {
-        ItemDetailsRequest idr = new ItemDetailsRequest();
+        ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getSaleDate(),event.getItemDetails().getItemName(),event.getItemDetails().getTransactionType(),event.getItemDetails().getItemPrice());
         itemDetailsService.addItemDetail(idr);
         updateGrid();
         closeForm();
@@ -233,7 +233,7 @@ public class ItemDetailsView extends VerticalLayout {
      */
     private void updateItemDetails(UpdateEvent event) {
         final int id = event.getItemDetails().getId();
-        final ItemDetailsRequest idr = new ItemDetailsRequest();
+        final ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getSaleDate(),event.getItemDetails().getItemName(),event.getItemDetails().getTransactionType(),event.getItemDetails().getItemPrice());
         itemDetailsService.updateItemDetails(id, idr);
         updateGrid();
         closeForm();

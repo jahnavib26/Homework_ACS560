@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.acs560.restaurantsales.restaurant_sales.entities.ItemDetailsEntity;
 import com.acs560.restaurantsales.restaurant_sales.entities.SalesEntity;
 import com.acs560.restaurantsales.restaurant_sales.entities.SalesEntityId;
+import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
 
 public interface ItemDetailsRepository extends CrudRepository<ItemDetailsEntity, SalesEntityId> {
   
@@ -23,4 +24,8 @@ public interface ItemDetailsRepository extends CrudRepository<ItemDetailsEntity,
 
 	 @Query(value = "SELECT * FROM item_details WHERE item_price = :itemPrice ", nativeQuery = true)
 	List<ItemDetailsEntity> findByNonPk(Double itemPrice);
+
+
+	@Query(value = "SELECT * FROM item_details where item_name=:itemName", nativeQuery = true)
+    List<ItemDetailsEntity> findByItemName(String itemName);
 }

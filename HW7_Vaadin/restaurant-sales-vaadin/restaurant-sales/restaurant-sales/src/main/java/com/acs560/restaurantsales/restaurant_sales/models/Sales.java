@@ -10,9 +10,9 @@ public class Sales {
     private LocalDate date;
     private String itemName;
     private String itemType;
-    private double itemPrice;
-    private int quantity;
-    private double transactionAmount;
+    private Double itemPrice;
+    private Integer quantity;
+    private Double transactionAmount;
     private String transactionType;
     private String staffGender;
     private String timeOfSale;
@@ -33,7 +33,7 @@ public class Sales {
      * @param yearMonth - The year and month of the sale (in YYYY-MM format).
      */
 
-    public Sales(LocalDate date, String itemName, String itemType, double itemPrice, int quantity, double transactionAmount,
+    public Sales(LocalDate date, String itemName, String itemType, Double itemPrice, Integer quantity, Double transactionAmount,
                  String transactionType, String staffGender, String timeOfSale, String yearMonth) {
         this.date = date;
         this.itemName = itemName;
@@ -75,14 +75,14 @@ public class Sales {
     public String getItemType() { return itemType; }
     public void setItemType(String itemType) { this.itemType = itemType; }
 
-    public double getItemPrice() { return itemPrice; }
-    public void setItemPrice(double itemPrice) { this.itemPrice = itemPrice; }
+    public Double getItemPrice() { return itemPrice; }
+    public void setItemPrice(Double itemPrice) { this.itemPrice = itemPrice; }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public double getTransactionAmount() { return transactionAmount; }
-    public void setTransactionAmount(double transactionAmount) { this.transactionAmount = transactionAmount; }
+    public Double getTransactionAmount() { return transactionAmount; }
+    public void setTransactionAmount(Double transactionAmount) { this.transactionAmount = transactionAmount; }
 
     public String getTransactionType() { return transactionType; }
     public void setTransactionType(String transactionType) { this.transactionType = transactionType; }

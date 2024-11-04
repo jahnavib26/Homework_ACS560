@@ -1,5 +1,9 @@
 package com.acs560.restaurantsales.restaurant_sales.views.ItemDetails;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -11,9 +15,11 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.shared.Registration;
 
 /**
@@ -23,7 +29,8 @@ public class ItemDetailsForm extends FormLayout {
 
     private static final long serialVersionUID = 476310807171214015L;
 
-    private final TextField saleDate = new TextField("Sale Date");
+//    private final TextField saleDate = new TextField("Sale Date");
+    private final DatePicker saleDate = new DatePicker("Sale Date");
     private final TextField itemName = new TextField("Item Name");
     private final ComboBox<String> transactionType = new ComboBox<>("Transaction Type");
     private final TextField itemPrice = new TextField("Item Price");
@@ -36,6 +43,7 @@ public class ItemDetailsForm extends FormLayout {
     private final Binder<ItemDetails> binder = new BeanValidationBinder<>(ItemDetails.class);
     private ItemDetails itemDetails;
     private boolean isAdd;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Constructor
@@ -44,8 +52,24 @@ public class ItemDetailsForm extends FormLayout {
         addClassName("itemdetails-form");
 
         transactionType.setItems("Cash", "Online", "Others");
+        saleDate.setLocale(Locale.US); // Adjust locale as needed
 
-        binder.bindInstanceFields(this);
+        // Add a ValueChangeListener to format the date
+        saleDate.addValueChangeListener(event -> {
+            LocalDate selectedDate = event.getValue();
+            if (selectedDate != null) {
+                saleDate.setPlaceholder(selectedDate.format(formatter));
+            }
+        });
+        binder.forField(saleDate).bind(ItemDetails::getSaleDate, ItemDetails::setSaleDate);
+        binder.forField(itemName).bind(ItemDetails::getItemName, ItemDetails::setItemName);
+        binder.forField(transactionType).bind(ItemDetails::getTransactionType, ItemDetails::setTransactionType);
+//        binder.forField(itemType).bind(Sales::getItemType, Sales::setItemType);
+        binder.forField(itemPrice)
+        .withConverter(new StringToDoubleConverter("Please enter a valid number"))
+        .bind(ItemDetails::getItemPrice, ItemDetails::setItemPrice);
+
+//        binder.bindInstanceFields(this);
 
         add(saleDate,itemName,transactionType, itemPrice ,createButtonsLayout());
         setWidth("25em");
@@ -101,22 +125,25 @@ public class ItemDetailsForm extends FormLayout {
         delete.setVisible(!isAdd);
 
         if (itemDetails != null) {
+        	System.out.print("Printing inside update");
+        	System.out.print(itemDetails.getItemPrice());
             this.itemDetails = itemDetails;
-            saleDate.setValue(String.valueOf(itemDetails.getSaleDate()));
+            saleDate.setValue(itemDetails.getSaleDate());
             itemName.setValue(itemDetails.getItemName());
             transactionType.setValue(itemDetails.getTransactionType());
             itemPrice.setValue(String.valueOf(itemDetails.getItemPrice()));
-            
+//            binder.setBean(this.itemDetails);
         } else {
             // Reset fields to defaults
-        	saleDate.setValue("");
+//        	saleDate.setValue();
             itemName.setValue("");
             transactionType.clear();
             itemPrice.setValue("");
             this.itemDetails = new ItemDetails();
         }
 
-        binder.setBean(itemDetails);
+        binder.setBean(this.itemDetails);
+        System.out.print("Printing after update");
     }
 
     /**

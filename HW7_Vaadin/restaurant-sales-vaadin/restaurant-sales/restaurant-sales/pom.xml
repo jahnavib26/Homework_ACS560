@@ -11,7 +11,7 @@
 	</parent>
 	
 	<groupId>com.acs560</groupId>
-	<artifactId>stocks-analyzer-vaadin</artifactId>
+	<artifactId>restaurant-sales-vaadin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>stock_analyzer</name>
 	<description>Demo project for Spring Boot</description>

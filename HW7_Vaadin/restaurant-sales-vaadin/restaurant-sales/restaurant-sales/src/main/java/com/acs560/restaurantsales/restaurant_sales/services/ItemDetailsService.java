@@ -21,20 +21,15 @@ public interface ItemDetailsService {
     
 	Optional<ItemDetails> getItemDetail(LocalDate saleDate, String itemName, String transactionType);
 
-	ItemDetails updateItemDetail(LocalDate saleDate, String itemName, String transactionType,
-			ItemDetailsRequest request);
+	ItemDetails updateItemDetail(@Valid ItemDetailsRequest itemDetailsRequest);
 
-	boolean deleteItemDetail(String itemName, String transactionType, LocalDate saleDate);
+	boolean deleteItemDetail(LocalDate saleDate,String itemName, String transactionType);
 
 
 	List<ItemDetails> getItemDetailByPrice(Double itemPrice);
 
 
-	void updateItemDetails(int id, ItemDetailsRequest idr);
-
-
-	void deleteItemDetails(int id);
-
+	
 
 	List<ItemDetails> getItemDetailsByItemName(String itemName);
 }

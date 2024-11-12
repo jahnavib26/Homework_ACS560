@@ -6,13 +6,12 @@ import com.acs560.restaurantsales.restaurant_sales.entities.SalesEntity;
 
 public class Sales {
 	
-	private ItemDetails ItemDetails;
-    private LocalDate date;
+	private LocalDate date;
     private String itemName;
     private String itemType;
-    private Double itemPrice;
-    private Integer quantity;
-    private Double transactionAmount;
+    private double itemPrice;
+    private int quantity;
+    private double transactionAmount;
     private String transactionType;
     private String staffGender;
     private String timeOfSale;
@@ -33,7 +32,7 @@ public class Sales {
      * @param yearMonth - The year and month of the sale (in YYYY-MM format).
      */
 
-    public Sales(LocalDate date, String itemName, String itemType, Double itemPrice, Integer quantity, Double transactionAmount,
+    public Sales(LocalDate date, String itemName, String itemType, double itemPrice, Integer quantity, double transactionAmount,
                  String transactionType, String staffGender, String timeOfSale, String yearMonth) {
         this.date = date;
         this.itemName = itemName;
@@ -63,6 +62,7 @@ public class Sales {
 
 	public Sales() {
 		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	// Getters and setters for each field
@@ -75,14 +75,14 @@ public class Sales {
     public String getItemType() { return itemType; }
     public void setItemType(String itemType) { this.itemType = itemType; }
 
-    public Double getItemPrice() { return itemPrice; }
-    public void setItemPrice(Double itemPrice) { this.itemPrice = itemPrice; }
+    public double getItemPrice() { return itemPrice; }
+    public void setItemPrice(double itemPrice) { this.itemPrice = itemPrice; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public Double getTransactionAmount() { return transactionAmount; }
-    public void setTransactionAmount(Double transactionAmount) { this.transactionAmount = transactionAmount; }
+    public double getTransactionAmount() { return transactionAmount; }
+    public void setTransactionAmount(double transactionAmount) { this.transactionAmount = transactionAmount; }
 
     public String getTransactionType() { return transactionType; }
     public void setTransactionType(String transactionType) { this.transactionType = transactionType; }

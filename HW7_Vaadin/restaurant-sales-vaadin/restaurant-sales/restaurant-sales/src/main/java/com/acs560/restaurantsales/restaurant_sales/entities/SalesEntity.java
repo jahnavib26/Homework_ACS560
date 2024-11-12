@@ -20,13 +20,13 @@ public class SalesEntity {
     private String itemType;	
 
     @Column(name = "item_price")
-    private Double itemPrice;
+    private double itemPrice;
 
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "transaction_amount")
-    private Double transactionAmount;
+    private double transactionAmount;
 
     @Column(name = "staff_gender")
     private String staffGender;
@@ -79,7 +79,7 @@ public class SalesEntity {
      * 
      * @return The item price.
      */
-    public Double getItemPrice() {
+    public double getItemPrice() {
         return itemPrice;
     }
 
@@ -115,7 +115,7 @@ public class SalesEntity {
      * 
      * @return The transaction amount.
      */
-    public Double getTransactionAmount() {
+    public double getTransactionAmount() {
         return transactionAmount;
     }
 

@@ -19,7 +19,7 @@ public class ItemDetails {
 
 	private String itemName;
     private String transactionType;
-    private Double itemPrice;
+    private double itemPrice;
 
    
     public ItemDetails(ItemDetailsEntity itemDetailsEntity) {
@@ -65,11 +65,11 @@ public class ItemDetails {
 		this.transactionType = transactionType;
 	}
 
-	public Double getItemPrice() {
+	public double getItemPrice() {
 		return itemPrice;
 	}
 
-	public void setItemPrice(Double itemPrice) {
+	public void setItemPrice(double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
 

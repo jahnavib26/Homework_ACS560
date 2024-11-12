@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -76,8 +77,12 @@ public class SalesForm extends FormLayout {
         binder.forField(transactionType).bind(Sales::getTransactionType, Sales::setTransactionType);
         binder.forField(itemType).bind(Sales::getItemType, Sales::setItemType);
         binder.forField(itemPrice)
-        .withConverter(new StringToDoubleConverter("Please enter a valid number"))
+        .withConverter(
+            value -> value.isEmpty() ? null : Double.parseDouble(value),  // Convert String to Double
+            value -> value == null ? "" : String.valueOf(value),          // Convert Double to String
+            "Please enter a valid number")
         .bind(Sales::getItemPrice, Sales::setItemPrice);
+
         binder.forField(quantity)
         .withConverter(new StringToIntegerConverter("Please enter a valid number"))
         .bind(Sales::getQuantity, Sales::setQuantity);
@@ -119,24 +124,24 @@ public class SalesForm extends FormLayout {
      * Handler for save action
      */
     private void handleSave() {
-    	System.out.print("Printing in handleSave");
-    	System.out.print("In handlesave printing");
-        System.out.print(sales.getItemName());
-        System.out.print(sales.getDate());
-        System.out.print(sales.getItemPrice());
-        try {
+    	try {
             binder.writeBean(sales);
 
             if (isAdd) {
-            	System.out.print("Printing in handleSave if condition");
-            	System.out.print(sales);
                 fireEvent(new AddEvent(this, sales));
             } else {
                 fireEvent(new UpdateEvent(this, sales));
             }
 
         } catch (ValidationException e) {
-            e.printStackTrace();
+            // Handle form validation errors here
+        	Notification.show("Form validation failed: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+        } catch (IllegalArgumentException e) {
+            // Handle a custom exception if the bill already exists
+        	Notification.show("Company already exists.", 3000, Notification.Position.MIDDLE);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+        	Notification.show("An unexpected error occurred: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
     }
 
@@ -145,38 +150,23 @@ public class SalesForm extends FormLayout {
      * @param sales - the sales object
      * @param isAdd - true indicates add, otherwise update
      */
-    public void update(Sales sales,List<ItemDetails> itemDetails, boolean isAdd) {
-        this.isAdd = isAdd;
+    public void update(Sales sales, List<ItemDetails> itemDetails, boolean isAdd) {
+    	this.isAdd = isAdd;
 
         // Set whether the delete button is visible
         delete.setVisible(!isAdd);
 
         if (sales != null) {
             this.sales = sales;
-
-            // Set fields with values from the existing sales object
-            saleDate.setValue(sales.getDate());
-            itemName.setValue(sales.getItemName());
-            transactionType.setValue(sales.getTransactionType());
-            itemType.setValue(sales.getItemType());
-            itemPrice.setValue(String.valueOf(sales.getItemPrice()));
-            quantity.setValue(String.valueOf(sales.getQuantity()));  // Convert int to String
-            transactionAmount.setValue(String.valueOf(sales.getTransactionAmount()));  
-            staffGender.setValue(sales.getStaffGender());
-            timeOfSale.setValue(sales.getTimeOfSale());
-            yearMonth.setValue(sales.getYearMonth());
-            
         } else {
-            // Reset fields to defaults
-            itemName.setValue("");
-            quantity.setValue("");
-            transactionAmount.setValue("");
-            transactionType.clear();
-            this.sales = new Sales();  // Create a new instance of Sales
+            // reset fields to defaults
+//            name.setValue("");
+            this.sales = new Sales();
         }
 
-        binder.setBean(this.sales);  // Always bind a non-null object
+        binder.setBean(sales);
     }
+
 
     /**
      * The abstract SalesFormEvent

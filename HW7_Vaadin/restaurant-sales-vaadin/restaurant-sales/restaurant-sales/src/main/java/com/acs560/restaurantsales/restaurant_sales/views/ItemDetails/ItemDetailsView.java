@@ -34,7 +34,7 @@ import jakarta.annotation.security.PermitAll;
 @SpringComponent
 @Scope("prototype")
 @PermitAll
-@Route(value = "item_details", layout = MainLayout.class)
+@Route(value = "", layout = MainLayout.class)
 @PageTitle("Item Details | Restaurant Sales")
 public class ItemDetailsView extends VerticalLayout {
 
@@ -232,9 +232,9 @@ public class ItemDetailsView extends VerticalLayout {
      * @param event - the UpdateEvent
      */
     private void updateItemDetails(UpdateEvent event) {
-        final int id = event.getItemDetails().getId();
-        final ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getSaleDate(),event.getItemDetails().getItemName(),event.getItemDetails().getTransactionType(),event.getItemDetails().getItemPrice());
-        itemDetailsService.updateItemDetails(id, idr);
+//        final int id = event.getItemDetails().getId();
+        ItemDetailsRequest idr = new ItemDetailsRequest(event.getItemDetails().getSaleDate(),event.getItemDetails().getItemName(),event.getItemDetails().getTransactionType(),event.getItemDetails().getItemPrice());
+        itemDetailsService.updateItemDetail(idr);
         updateGrid();
         closeForm();
     }
@@ -244,7 +244,7 @@ public class ItemDetailsView extends VerticalLayout {
      * @param event - the DeleteEvent
      */
     private void deleteItemDetails(DeleteEvent event) {
-        itemDetailsService.deleteItemDetails(event.getItemDetails().getId());
+        itemDetailsService.deleteItemDetail(event.getItemDetails().getSaleDate(),event.getItemDetails().getItemName(),event.getItemDetails().getTransactionType());
         updateGrid();
         closeForm();
     }

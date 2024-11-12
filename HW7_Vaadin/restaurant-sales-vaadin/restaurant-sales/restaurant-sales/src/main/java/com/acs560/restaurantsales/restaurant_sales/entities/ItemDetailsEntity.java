@@ -13,33 +13,26 @@ import lombok.*;
 @EqualsAndHashCode
 public class ItemDetailsEntity {
 
-	
     @EmbeddedId
     private SalesEntityId id;
 
     @Column(name = "item_price", nullable = false)
-    private Double itemPrice;
+    private double itemPrice;
 
-    
     @MapsId
     @JoinColumns({
         @JoinColumn(name = "sale_date", referencedColumnName = "sale_date"),
         @JoinColumn(name = "item_name", referencedColumnName = "item_name"),
         @JoinColumn(name = "transaction_type", referencedColumnName = "transaction_type")
     })
-    @ManyToOne(fetch = FetchType.LAZY) 
+    @ManyToOne(fetch = FetchType.LAZY)
     private SalesEntity salesEntity;
 
-    
-    public ItemDetailsEntity(SalesEntityId id, Double itemPrice, SalesEntity salesEntity) {
+    // Keeping only one constructor that includes itemPrice and salesEntity for initialization
+    public ItemDetailsEntity(SalesEntityId id, double itemPrice, SalesEntity salesEntity) {
         this.id = id;
         this.itemPrice = itemPrice;
-        this.salesEntity = salesEntity; 
-    }
-    
-    public ItemDetailsEntity(SalesEntityId id, Double itemPrice) {
-        this.id = id;
-        this.itemPrice = itemPrice;
+        this.salesEntity = salesEntity;
     }
 
 	public SalesEntityId getId() {
@@ -50,19 +43,23 @@ public class ItemDetailsEntity {
 		this.id = id;
 	}
 
-	public Double getItemPrice() {
+	public double getItemPrice() {
 		return itemPrice;
 	}
 
-	public void setItemPrice(Double itemPrice) {
+	public void setItemPrice(double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
 
-	
-	
-	public ItemDetailsEntity() {
+	public SalesEntity getSalesEntity() {
+		return salesEntity;
+	}
+
+	public void setSalesEntity(SalesEntity salesEntity) {
+		this.salesEntity = salesEntity;
+	}
+    public ItemDetailsEntity() {
         super();
     }
-
-   
+    
 }

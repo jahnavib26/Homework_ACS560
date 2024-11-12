@@ -72,14 +72,13 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
 	}
 
 	@Override
-	public ItemDetails updateItemDetail(LocalDate saleDate, String itemName, String transactionType,
-			ItemDetailsRequest request) {
+	public ItemDetails updateItemDetail(ItemDetailsRequest request) {
 
 		ItemDetails updatedItemDetails = null;
 		System.out.print("\nInside updateitemDetails\n");
 		System.out.print(request.getItemPrice());
 
-		if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) {
+		if (itemDetailsRepository.existsById(new SalesEntityId(request.getSaleDate(), request.getItemName(), request.getTransactionType()))) {
 
 			// Fetch the related SalesEntity
 			Optional<SalesEntity> salesEntityOpt = salesRepository.findByTransactionTypeAndItemName(
@@ -88,7 +87,7 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
 			if (salesEntityOpt.isPresent()) {
 				SalesEntity salesEntity = salesEntityOpt.get();
 
-				var itemDetailsEntity = new ItemDetailsEntity(new SalesEntityId(saleDate, itemName, transactionType),
+				var itemDetailsEntity = new ItemDetailsEntity(new SalesEntityId(request.getSaleDate(), request.getItemName(), request.getTransactionType()),
 						request.getItemPrice(), salesEntity);
 				itemDetailsEntity = itemDetailsRepository.save(itemDetailsEntity);
 				updatedItemDetails = new ItemDetails(itemDetailsEntity);
@@ -101,8 +100,10 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
 	}
 
 	@Override
-	public boolean deleteItemDetail(String itemName, String transactionType, LocalDate saleDate) {
+	public boolean deleteItemDetail(LocalDate saleDate,String itemName, String transactionType) {
 		boolean isDeleted = false;
+		System.out.print("Inside deleteItemDetail");
+		System.out.print(itemName);
 
 		if (itemDetailsRepository.existsById(new SalesEntityId(saleDate, itemName, transactionType))) {
 			itemDetailsRepository.deleteById(new SalesEntityId(saleDate, itemName, transactionType));
@@ -122,17 +123,7 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
 		return itemDetailsList;
 	}
 
-	@Override
-	public void updateItemDetails(int id, ItemDetailsRequest idr) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteItemDetails(int id) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	@Override
 	public List<ItemDetails> getItemDetailsByItemName(String itemName) {
@@ -143,5 +134,7 @@ public class ItemDetailsServiceImpl implements ItemDetailsService {
 
 		return itemDetailsList;
 	}
+
+	
 
 }

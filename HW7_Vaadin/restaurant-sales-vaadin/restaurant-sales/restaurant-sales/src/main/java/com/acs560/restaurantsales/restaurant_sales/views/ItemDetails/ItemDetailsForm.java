@@ -5,6 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import com.acs560.restaurantsales.restaurant_sales.models.ItemDetails;
+import com.acs560.restaurantsales.restaurant_sales.models.Sales;
+import com.acs560.restaurantsales.restaurant_sales.views.sales.SalesForm.AddEvent;
+import com.acs560.restaurantsales.restaurant_sales.views.sales.SalesForm.UpdateEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -12,6 +15,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -99,7 +103,7 @@ public class ItemDetailsForm extends FormLayout {
      * Handler for save action
      */
     private void handleSave() {
-        try {
+    	try {
             binder.writeBean(itemDetails);
 
             if (isAdd) {
@@ -109,7 +113,14 @@ public class ItemDetailsForm extends FormLayout {
             }
 
         } catch (ValidationException e) {
-            e.printStackTrace();
+            // Handle form validation errors here
+        	Notification.show("Form validation failed: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+        } catch (IllegalArgumentException e) {
+            // Handle a custom exception if the bill already exists
+        	Notification.show("Company already exists.", 3000, Notification.Position.MIDDLE);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+        	Notification.show("An unexpected error occurred: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
     }
 
@@ -119,31 +130,20 @@ public class ItemDetailsForm extends FormLayout {
      * @param isAdd - true indicates add, otherwise update
      */
     public void update(ItemDetails itemDetails, boolean isAdd) {
-        this.isAdd = isAdd;
+    	this.isAdd = isAdd;
 
         // Set whether the delete button is visible
         delete.setVisible(!isAdd);
 
         if (itemDetails != null) {
-        	System.out.print("Printing inside update");
-        	System.out.print(itemDetails.getItemPrice());
             this.itemDetails = itemDetails;
-            saleDate.setValue(itemDetails.getSaleDate());
-            itemName.setValue(itemDetails.getItemName());
-            transactionType.setValue(itemDetails.getTransactionType());
-            itemPrice.setValue(String.valueOf(itemDetails.getItemPrice()));
-//            binder.setBean(this.itemDetails);
         } else {
-            // Reset fields to defaults
-//        	saleDate.setValue();
-            itemName.setValue("");
-            transactionType.clear();
-            itemPrice.setValue("");
+            // reset fields to defaults
+//            name.setValue("");
             this.itemDetails = new ItemDetails();
         }
 
-        binder.setBean(this.itemDetails);
-        System.out.print("Printing after update");
+        binder.setBean(itemDetails);
     }
 
     /**
